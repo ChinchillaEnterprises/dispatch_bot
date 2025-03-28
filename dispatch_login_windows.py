@@ -16,10 +16,13 @@ from browser_use import Agent, Browser, BrowserConfig
 # Load environment variables
 load_dotenv()
 
-# Define login credentials
-class DispatchCredentials:
-    EMAIL = "mehrad@chinchilla-ai.com"
-    PASSWORD = "Mehrad1995bayat!"
+# Get login credentials from environment variables
+EMAIL = os.getenv('DISPATCH_EMAIL')
+PASSWORD = os.getenv('DISPATCH_PASSWORD')
+
+# Check if credentials are set
+if not EMAIL or not PASSWORD:
+    raise ValueError('DISPATCH_EMAIL and DISPATCH_PASSWORD must be set in the .env file')
 
 # Monkey patch the SignalHandler class to work on Windows
 # This is done before importing the Agent class
@@ -42,7 +45,7 @@ async def main():
     # Define the task with detailed instructions
     task = (
         "Go to https://app.dispatchit.com/users/sign_in. "
-        f"Login with email {DispatchCredentials.EMAIL} and password {DispatchCredentials.PASSWORD}. "
+        f"Login with email {EMAIL} and password {PASSWORD}. "
         "After logging in, look for an 'accept' button on the page and click it if it exists. "
         "If there's no 'accept' button, just confirm that you've successfully logged in."
     )
